@@ -1,44 +1,33 @@
-const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
+
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-let win;
+let mainWindow;
 
-function createWindow () {
-  win = new BrowserWindow({
+function createWindow() {
+  mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
     fullscreen: true,
     autoHideMenuBar: true,
     icon: path.join(__dirname, '../public/icon.ico'),
-    title: 'MySingleSiteBrowser',
+    title: 'WQ Browser',
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
-      webviewTag: true // new 
-    }
+      contextIsolation: true,
+      nodeIntegration: false,
+      webviewTag: true,
+    },
   });
 
-  win.loadFile(path.join(__dirname, '../public/index.html')); // Replace with your target site
+  mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
-  // Optional: disable right click and unwanted navigation
-  win.webContents.on('context-menu', e => e.preventDefault());
-  win.webContents.on('will-navigate', (e, url) => {
-    if (!url.startsWith('https://google.com')) e.preventDefault();
+  mainWindow.on('closed', () => {
+    mainWindow = null;
   });
-
-  // Keyboard shortcuts via IPC
-  ipcMain.on('reload', () => win.reload());
-  ipcMain.on('toggle-fullscreen', () => win.setFullScreen(!win.isFullScreen()));
 }
 
 app.whenReady().then(createWindow);
-
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
-
-app.on('will-quit', () => {
-  globalShortcut.unregisterAll();
-});
-

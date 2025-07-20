@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>WQ Browser</title>
+  <link rel="stylesheet" href="./styles.css" />
   <style>
     body {
       margin: 0;
@@ -40,8 +42,32 @@
       border-radius: 4px;
     }
 
+    #tab-popup {
+      position: absolute;
+      left: 0;
+      top: 50px;
+      bottom: 0;
+      width: 220px;
+      background: #1e1e1e;
+      overflow-y: auto;
+      display: none;
+      z-index: 99;
+      border-right: 1px solid #333;
+    }
+
+    #tab-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #tab-list li:hover {
+      background: #333;
+    }
+
     #webview-container {
       flex-grow: 1;
+      position: relative;
     }
 
     webview {
@@ -51,36 +77,20 @@
   </style>
 </head>
 <body>
+  <div id="tab-popup">
+    <ul id="tab-list"></ul>
+  </div>
+
   <div id="address-bar">
     <input type="text" id="url-input" placeholder="Enter a URL..." />
     <button id="go-button">Go</button>
   </div>
+
   <div id="webview-container">
     <webview id="webview" src="https://google.com" allowpopups></webview>
   </div>
 
-  <script>
-    const urlInput = document.getElementById('url-input');
-    const goButton = document.getElementById('go-button');
-    const webview = document.getElementById('webview');
-
-    goButton.addEventListener('click', () => {
-      let url = urlInput.value.trim();
-      if (!url.startsWith('http')) {
-        url = 'https://' + url;
-      }
-      webview.loadURL(url);
-    });
-
-    urlInput.addEventListener('keydown', e => {
-      if (e.key === 'Enter') goButton.click();
-    });
-
-    // Sync input with current URL
-    webview.addEventListener('did-navigate', (e) => {
-      urlInput.value = e.url;
-    });
-  </script>
+  <script src="../src/renderer.js"></script>
+  <script type="module" src="../src/shortcuts.js"></script>
 </body>
 </html>
-
