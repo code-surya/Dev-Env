@@ -1,16 +1,26 @@
 {
-  "name": "browser-one",
+  "name": "wq-browser",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Minimal browser for a single site",
+  "main": "src/main.js",
   "scripts": {
-    "start":"electron src/main.js"
+    "start": "electron src/main.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+  "build": {
+    "appId": "com.surya.wq",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["nsis"],
+      "icon": "public/icon.ico"
+    }
+  },
   "devDependencies": {
-    "electron": "^37.2.3"
+    "electron": "^30.0.0",
+    "electron-builder": "^24.0.0"
   }
 }
+
