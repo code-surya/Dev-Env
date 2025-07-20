@@ -22,6 +22,25 @@ function createWindow() {
 
   mainWindow.loadFile(path.join(__dirname, '../public/index.html'));
 
+  mainWindow.webContents.setIgnoreMenuShortcuts(false); // ← this allows us to receive key events
+
+  // 💡 Global shortcut forwarding via before-input-event
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    const key = input.key.toLowerCase();
+    if (key === 'escape') {
+        event.preventDefault();
+        mainWindow.webContents.send('shortcut', 'escape');
+    }
+
+    if (input.alt) {
+      const key = input.key.toLowerCase();
+      if (['n', 'j', 'k', 'p'].includes(key)) {
+        event.preventDefault();
+        mainWindow.webContents.send('shortcut', key);
+      }
+    }
+  });
+
   mainWindow.on('closed', () => {
     mainWindow = null;
   });

@@ -1,4 +1,7 @@
 node_modules
 dist/
 
+out/
+build/
+node_modules/
 

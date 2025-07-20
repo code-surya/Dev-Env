@@ -73,4 +73,26 @@ window.addEventListener('toggle-tab-bar', () => {
   }
 });
 
+window.addEventListener('message', (event) => {
+  const { type, key, altKey } = event.data;
+  if (type === 'key') {
+    const k = key.toLowerCase();
+
+    if (k === 'escape') {
+      document.getElementById('url-input')?.focus();
+    }
+
+    if (altKey) {
+      if (k === 'n') {
+        window.dispatchEvent(new CustomEvent('new-tab'));
+      } else if (k === 'j') {
+        window.dispatchEvent(new CustomEvent('switch-tab', { detail: -1 }));
+      } else if (k === 'k') {
+        window.dispatchEvent(new CustomEvent('switch-tab', { detail: 1 }));
+      } else if (k === 'p') {
+        window.dispatchEvent(new CustomEvent('toggle-tab-bar'));
+      }
+    }
+  }
+});
 loadTab(0); // Load the first tab
